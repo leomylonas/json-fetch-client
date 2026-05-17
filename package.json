@@ -1,0 +1,69 @@
+{
+	"name": "json-fetch-client",
+	"version": "0.0.0",
+	"description": "A type-safe wrapper around `fetch` for making HTTP requests with JSON payloads.",
+	"author": "Leo Mylonas",
+	"license": "MPL-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/leomylonas/json-fetch-client.git"
+	},
+	"homepage": "https://github.com/leomylonas/json-fetch-client#readme",
+	"bugs": {
+		"url": "https://github.com/leomylonas/json-fetch-client/issues"
+	},
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/src/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/src/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"sideEffects": false,
+	"packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"dev": "vite build --watch",
+		"build": "pnpm run clean && vite build",
+		"clean": "rimraf dist",
+		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"lint": "eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
+		"test:watch": "vitest",
+		"pack:check": "rimraf .pack-tmp && mkdir -p .pack-tmp && pnpm pack --pack-destination .pack-tmp && rimraf .pack-tmp",
+		"release:check": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run pack:check",
+		"prepublishOnly": "pnpm run release:check"
+	},
+	"dependencies": {
+		"lodash-es": "^4.17.21",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@types/lodash-es": "^4.17.12",
+		"@typescript-eslint/eslint-plugin": "^8.46.2",
+		"@typescript-eslint/parser": "^8.46.2",
+		"@vitest/coverage-v8": "^4.1.6",
+		"eslint": "^9.39.1",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^16.5.0",
+		"msw": "^2.14.6",
+		"prettier": "^3.6.2",
+		"rimraf": "^6.1.2",
+		"typescript": "^6.0.3",
+		"vite": "^8.0.13",
+		"vite-plugin-dts": "^4.5.4",
+		"vitest": "^4.1.6"
+	}
+}
