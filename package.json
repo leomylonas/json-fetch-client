@@ -1,5 +1,5 @@
 {
-	"name": "json-fetch-client",
+	"name": "@leomylonas/json-fetch-client",
 	"version": "0.0.0",
 	"description": "A type-safe wrapper around `fetch` for making HTTP requests with JSON payloads.",
 	"author": "Leo Mylonas",

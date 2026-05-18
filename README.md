@@ -1,4 +1,4 @@
-# json-fetch-client
+# @leomylonas/json-fetch-client
 
 Typed `fetch` client for JSON APIs with:
 
@@ -24,19 +24,19 @@ Typed `fetch` client for JSON APIs with:
 ## Installation
 
 ```bash
-pnpm add json-fetch-client zod
+pnpm add @leomylonas/json-fetch-client zod
 ```
 
 If you use npm:
 
 ```bash
-npm install json-fetch-client zod
+npm install @leomylonas/json-fetch-client zod
 ```
 
 ## Quick Start
 
 ```ts
-import FetchClient from 'json-fetch-client';
+import FetchClient from '@leomylonas/json-fetch-client';
 
 const client = new FetchClient({
   baseUrl: 'https://api.example.com',
@@ -99,7 +99,7 @@ await client.deleteJson('https://api.example.com/users/1');
 Non-2xx responses throw `FetchClientError`.
 
 ```ts
-import { FetchClientError } from 'json-fetch-client';
+import { FetchClientError } from '@leomylonas/json-fetch-client';
 
 try {
   await client.getJson('https://api.example.com/will-fail');
