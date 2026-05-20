@@ -2,13 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { parseKnownError } from '../src/Errors/ErrorParsers';
 import { FetchClientError } from '../src/Errors/FetchClientError';
-import {
-	getJsonApiMessage,
-	getJsonApiStatus,
-	parseJsonApiErrorDocument,
-} from '../src/Errors/JsonApiError';
-import { createProblemDetailsMessage, parseProblemDetails } from '../src/Errors/ProblemDetails';
-import { parseValidationProblemDetails } from '../src/Errors/ValidationProblemDetails';
+import { getJsonApiMessage, getJsonApiStatus, isJsonApiError, parseJsonApiErrorDocument } from '../src/Errors/JsonApiError';
+import { createProblemDetailsMessage, isProblemDetails, parseProblemDetails } from '../src/Errors/ProblemDetails';
+import { isValidationProblemDetails, parseValidationProblemDetails } from '../src/Errors/ValidationProblemDetails';
 
 describe('Error schema/parser utilities', () => {
 	it('parses problem details and builds fallback message', () => {
@@ -58,10 +54,7 @@ describe('Error schema/parser utilities', () => {
 		const problemDefaultStatus = parseKnownError({ title: 'Oops', type: 'about:blank' });
 		expect(problemDefaultStatus).toMatchObject({ kind: 'problem-details', status: 500 });
 
-		const custom = parseKnownError(
-			{ any: 'thing' },
-			[(input) => (input ? { kind: 'unknown', status: 418, message: 'teapot', responseBody: { ok: true } } : undefined)],
-		);
+		const custom = parseKnownError({ any: 'thing' }, [(input) => (input ? { kind: 'unknown', status: 418, message: 'teapot', responseBody: { ok: true } } : undefined)]);
 		expect(custom).toMatchObject({ kind: 'unknown', status: 418, message: 'teapot' });
 
 		expect(parseKnownError({ foo: 'bar' }, [() => undefined])).toBeUndefined();
@@ -71,5 +64,21 @@ describe('Error schema/parser utilities', () => {
 		const err = new FetchClientError('x', 400, { a: 1 });
 		expect(err.kind).toBe('unknown');
 		expect(err.responseBody).toEqual({ a: 1 });
+	});
+
+	it('discriminates typed FetchClientError instances', () => {
+		const problem = new FetchClientError('problem', 400, { title: 'Bad', status: 400 }, 'problem-details');
+		const validation = new FetchClientError('validation', 422, { title: 'Bad', status: 422, errors: { email: ['Required'] } }, 'validation-problem-details');
+		const jsonApi = new FetchClientError('jsonapi', 409, { errors: [{ status: '409', title: 'Conflict' }] }, 'jsonapi-error');
+		const invalidJsonApi = new FetchClientError('jsonapi', 409, { errors: [] }, 'jsonapi-error');
+
+		expect(isProblemDetails(problem)).toBe(true);
+		expect(isValidationProblemDetails(validation)).toBe(true);
+		expect(isJsonApiError(jsonApi)).toBe(true);
+
+		expect(isProblemDetails(validation)).toBe(false);
+		expect(isValidationProblemDetails(problem)).toBe(false);
+		expect(isJsonApiError(invalidJsonApi)).toBe(false);
+		expect(isProblemDetails({ kind: 'problem-details', responseBody: { title: 'Bad' } })).toBe(false);
 	});
 });

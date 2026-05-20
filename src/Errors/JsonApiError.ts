@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FetchClientError } from './FetchClientError';
 
 export const jsonApiErrorObjectSchema = z
 	.object({
@@ -29,6 +30,10 @@ export function parseJsonApiErrorDocument(error: unknown): IJsonApiErrorDocument
 	}
 
 	return parsed.data;
+}
+
+export function isJsonApiError(error: unknown): error is FetchClientError<IJsonApiErrorDocument, 'jsonapi-error'> {
+	return error instanceof FetchClientError && error.kind === 'jsonapi-error' && parseJsonApiErrorDocument(error.responseBody) !== undefined;
 }
 
 export function getJsonApiStatus(errors: IJsonApiErrorObject[]): number {

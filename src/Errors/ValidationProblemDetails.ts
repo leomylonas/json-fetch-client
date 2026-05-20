@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FetchClientError } from './FetchClientError';
 import { problemDetailsSchema } from './ProblemDetails';
 
 export const validationProblemDetailsSchema = problemDetailsSchema.extend({
@@ -14,4 +15,8 @@ export function parseValidationProblemDetails(error: unknown): IValidationProble
 	}
 
 	return parsed.data;
+}
+
+export function isValidationProblemDetails(error: unknown): error is FetchClientError<IValidationProblemDetails, 'validation-problem-details'> {
+	return error instanceof FetchClientError && error.kind === 'validation-problem-details' && parseValidationProblemDetails(error.responseBody) !== undefined;
 }

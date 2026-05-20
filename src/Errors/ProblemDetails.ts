@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FetchClientError } from './FetchClientError';
 
 export const problemDetailsSchema = z
 	.object({
@@ -23,6 +24,10 @@ export function parseProblemDetails(error: unknown): IProblemDetails | undefined
 	}
 
 	return parsed.data;
+}
+
+export function isProblemDetails(error: unknown): error is FetchClientError<IProblemDetails, 'problem-details'> {
+	return error instanceof FetchClientError && error.kind === 'problem-details' && parseProblemDetails(error.responseBody) !== undefined;
 }
 
 export function createProblemDetailsMessage(problem: IProblemDetails): string {
