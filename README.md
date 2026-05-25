@@ -1,5 +1,10 @@
 # @leomylonas/json-fetch-client
 
+[![CI](https://github.com/leomylonas/json-fetch-client/actions/workflows/ci.yml/badge.svg)](https://github.com/leomylonas/json-fetch-client/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/leomylonas/json-fetch-client)](https://github.com/leomylonas/json-fetch-client/releases)
+[![npm](https://img.shields.io/npm/v/@leomylonas/json-fetch-client)](https://www.npmjs.com/package/@leomylonas/json-fetch-client)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Typed `fetch` client for JSON APIs with:
 
 - ergonomic HTTP helpers (`get`, `post`, `put`, `patch`, `delete`)
@@ -185,6 +190,10 @@ Coverage is enforced at 100% (lines/branches/functions/statements).
 pnpm run release:check
 ```
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting issues and submitting pull requests.
+
 ## License
 
-MPL-2.0
+[MIT](LICENSE)
